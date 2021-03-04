@@ -1,0 +1,20 @@
+{
+  "name": "#RiveraProducts",
+  "short_name": "#RiveraProducts",
+  "description": "Empacadora Rivera Products",
+  "background_color": "#2B2B2B",
+  "theme_color": "#F0DB4F",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": "./?utm_source=web_app_manifest",
+  "scope": "./",
+  "lang": "es-MX",
+  "icons": [
+  
+    {
+      "src": "./img/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
