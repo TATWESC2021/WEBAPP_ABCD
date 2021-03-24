@@ -9,7 +9,7 @@ const CACHE_NAME = 'v1_cache_riveraproducts',
     'https://use.fontawesome.com/releases/v5.0.6/webfonts/fa-brands-400.woff2',
     './style.css',
     './script.js',
-    './img/logo.png',
+    './img/logo.jpeg',
     
   ]
 
