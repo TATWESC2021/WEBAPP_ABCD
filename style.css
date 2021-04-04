@@ -14,8 +14,13 @@ html {
   color: var(--second-color);
   background-color: var(--main-modal-color);
 }
-.carousel, .carousel-inner > .item > img {
-  height: 100px;
+.carousel-inner img {
+    width: 100%;
+    max-height: 460px;
+}
+
+.carousel-inner{
+ height: 200px;
 }
 *,
 *:after,
