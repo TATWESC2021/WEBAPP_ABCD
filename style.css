@@ -14,7 +14,9 @@ html {
   color: var(--second-color);
   background-color: var(--main-modal-color);
 }
-
+.carousel, .carousel-inner > .item > img {
+  height: 100px;
+}
 *,
 *:after,
 *:before {
@@ -26,7 +28,6 @@ html {
 body {
   margin: 2rem auto;
   overflow-x: hidden;
-  
 }
 
 a {
