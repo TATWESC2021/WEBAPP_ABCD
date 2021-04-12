@@ -1,3 +1,98 @@
+<?php 
+  
+$alert = '';
+
+session_start();
+if(!empty($_SESSION['active']))
+{
+  header('location: sistema/');
+}else{
+
+  if(!empty($_POST))
+  {
+    if(empty($_POST['usuario']) || empty($_POST['clave']))
+    {
+      $alert = 'Ingrese su usuario y su calve';
+    }else{
+
+      require_once "conexion.php";
+
+      $user = mysqli_real_escape_string($conection,$_POST['usuario']);
+      $pass = md5(mysqli_real_escape_string($conection,$_POST['clave']));
+
+      $query = mysqli_query($conection,"SELECT * FROM Usuario WHERE Usuario= '$user' AND contraseña = '$pass'");
+      mysqli_close($conection);
+      $result = mysqli_num_rows($query);
+
+      if($result > 0)
+      {
+        $data = mysqli_fetch_array($query);
+        $_SESSION['active'] = true;
+        $_SESSION['idUser'] = $data['id_usuario'];
+        $_SESSION['nombre'] = $data['nombre'];
+                                $_SESSION['apellido']  = $data['apellidos'];
+                                $_SESSION['email']  = $data['correo'];
+                                $_SESSION['rol']    = $data['idrol'];
+        $_SESSION['user']   = $data['usuario'];
+        
+
+        header('location: sistema/');
+      }else{
+        $alert = 'El usuario o la clave son incorrectos';
+        session_destroy();
+      }
+
+
+    }
+
+  }
+}
+  require_once "conexion.php";
+
+ 
+  if(!empty($_POST))
+  {
+    $alerta='';
+    if(empty($_POST['nombre']) || empty($_POST['correo']) || empty($_POST['usuario']) || empty($_POST['contraseña'])||empty($_POST["apellidos"]) 
+                    ||empty($_POST['fecha_nac'])||empty($_POST['telefono'])||empty($_POST['direccion']))
+    {
+      $alerta='<p class="msg_error">Todos los campos son obligatorios.</p>';
+    }else{
+
+      $nombre = $_POST['nombre'];
+                        $apellidos = $_POST['apellidos'];
+      $fecha_nac  = $_POST['fecha_nac'];
+                        $telefono = $_POST['telefono'];
+      $correo   = $_POST['correo'];
+                        $direccion = $_POST['direccion'];
+                        $usuario = $_POST['usuario'];
+      $contraseña  = md5($_POST['contraseña']);
+      $rol    = 2;
+
+
+      $query = mysqli_query($conection,"SELECT * FROM usuario WHERE usuario = '$usuario' OR correo = '$correo' ");
+      $result = mysqli_fetch_array($query);
+
+      if($result > 0){
+        $alerta='<p class="msg_error">El correo o el usuario ya existe.</p>';
+      }else{
+
+        $query_insert = mysqli_query($conection,"INSERT INTO `usuario`(`nombre`, `apellidos`, `Fecha_nac`, `telefono`, `correo`, `direccion`,`idrol`, `Usuario`, `Contraseña`) VALUES"
+                                        . " ($nombre, $apellidos,$fecha_nac,$telefono,$correo,$direccion,$rol, $usuario,$contraseña)");
+        if($query_insert){
+          $alerta='<p class="msg_save">Usuario creado correctamente.</p>';
+        }else{
+                                $alerta='<p class="msg_error">Error al crear el usuario.</p>';}
+                               
+        }
+
+      }
+
+
+    }
+ ?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -59,12 +154,84 @@ Chocoflan, gelatinas básicas y de diseño, tiramisú, niño envuelto, carlota y
       <input class="form-control mr-sm-2" type="search" placeholder="Contraseña" aria-label="Search">
       <div class="btn-toolbar">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Acceder</button>
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit" href="registrarse.php">Registrarse</button>
+      <button id="btn_registrar" class="btn btn-outline-success my-2 my-sm-0" type="submit" href="registrarse.php">Registrarse</button>
       </div>
     </form>
   </div>
    
 </nav>
+    
+     <!-- Modal - personalizado -->
+
+ 
+  </section>
+  
+   <div  id="modal_custom" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+        <section id="containerA">
+    
+    <div class="form_register2">
+      
+      <hr>
+      <div class="alert"><?php echo isset($alerta) ? $alerta : ''; ?></div>
+
+            <form action="" method="post" class="form">
+               
+               <input type="text" name="nombre" id="nombre" placeholder="Nombre completo">
+                                
+                <input type="text" name="apellidos" id="apellidos" placeholder="Apellidos">
+                
+                <input type="text" name="RFC" id="RFC" placeholder="RFC">
+                                
+                <input type="date" name="fecha_nac" id="fecha_nac" placeholder="Fecha de nacimiento">
+                                
+                <input type="number" name="telefono" id="telefono" placeholder="Telefono">
+        
+        <input type="email" name="correo" id="correo" placeholder="Correo electrónico">
+                                
+                <input type="text" name="direccion" id="direccion" placeholder="direccion">
+        
+        <input type="text" name="usuario" id="usuario" placeholder="Usuario">
+        
+        <input type="password" name="contraseña" id="contraseña" placeholder="contraseña">
+        
+        <input align="middle" type="submit" value="Crear usuario" class="btn_save">
+                                 <a class="etiquet" href="index.php" >Iniciar Sesion</a>       
+                          
+             
+
+      </form>
+
+
+    </div>
+
+
+  </section>
+      
+      
+        
+        
+
+
+
+    
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+        </div>
+    </div>
+  </div>
+</div>
+</div> 
   <header class="Header">
  
     <img src="./img/logo.jpeg" alt="#Rivera Products">
@@ -213,6 +380,10 @@ Chocoflan, gelatinas básicas y de diseño, tiramisú, niño envuelto, carlota y
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 
      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+
+
+
   <script src="./script.js"></script>
 </body>
 
