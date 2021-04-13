@@ -1,98 +1,3 @@
-<?php 
-  
-$alert = '';
-
-session_start();
-if(!empty($_SESSION['active']))
-{
-  header('location: sistema/');
-}else{
-
-  if(!empty($_POST))
-  {
-    if(empty($_POST['usuario']) || empty($_POST['clave']))
-    {
-      $alert = 'Ingrese su usuario y su calve';
-    }else{
-
-      require_once "conexion.php";
-
-      $user = mysqli_real_escape_string($conection,$_POST['usuario']);
-      $pass = md5(mysqli_real_escape_string($conection,$_POST['clave']));
-
-      $query = mysqli_query($conection,"SELECT * FROM Usuario WHERE Usuario= '$user' AND contraseña = '$pass'");
-      mysqli_close($conection);
-      $result = mysqli_num_rows($query);
-
-      if($result > 0)
-      {
-        $data = mysqli_fetch_array($query);
-        $_SESSION['active'] = true;
-        $_SESSION['idUser'] = $data['id_usuario'];
-        $_SESSION['nombre'] = $data['nombre'];
-                                $_SESSION['apellido']  = $data['apellidos'];
-                                $_SESSION['email']  = $data['correo'];
-                                $_SESSION['rol']    = $data['idrol'];
-        $_SESSION['user']   = $data['usuario'];
-        
-
-        header('location: sistema/');
-      }else{
-        $alert = 'El usuario o la clave son incorrectos';
-        session_destroy();
-      }
-
-
-    }
-
-  }
-}
-  require_once "conexion.php";
-
- 
-  if(!empty($_POST))
-  {
-    $alerta='';
-    if(empty($_POST['nombre']) || empty($_POST['correo']) || empty($_POST['usuario']) || empty($_POST['contraseña'])||empty($_POST["apellidos"]) 
-                    ||empty($_POST['fecha_nac'])||empty($_POST['telefono'])||empty($_POST['direccion']))
-    {
-      $alerta='<p class="msg_error">Todos los campos son obligatorios.</p>';
-    }else{
-
-      $nombre = $_POST['nombre'];
-                        $apellidos = $_POST['apellidos'];
-      $fecha_nac  = $_POST['fecha_nac'];
-                        $telefono = $_POST['telefono'];
-      $correo   = $_POST['correo'];
-                        $direccion = $_POST['direccion'];
-                        $usuario = $_POST['usuario'];
-      $contraseña  = md5($_POST['contraseña']);
-      $rol    = 2;
-
-
-      $query = mysqli_query($conection,"SELECT * FROM usuario WHERE usuario = '$usuario' OR correo = '$correo' ");
-      $result = mysqli_fetch_array($query);
-
-      if($result > 0){
-        $alerta='<p class="msg_error">El correo o el usuario ya existe.</p>';
-      }else{
-
-        $query_insert = mysqli_query($conection,"INSERT INTO `usuario`(`nombre`, `apellidos`, `Fecha_nac`, `telefono`, `correo`, `direccion`,`idrol`, `Usuario`, `Contraseña`) VALUES"
-                                        . " ($nombre, $apellidos,$fecha_nac,$telefono,$correo,$direccion,$rol, $usuario,$contraseña)");
-        if($query_insert){
-          $alerta='<p class="msg_save">Usuario creado correctamente.</p>';
-        }else{
-                                $alerta='<p class="msg_error">Error al crear el usuario.</p>';}
-                               
-        }
-
-      }
-
-
-    }
- ?>
-
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -154,7 +59,7 @@ Chocoflan, gelatinas básicas y de diseño, tiramisú, niño envuelto, carlota y
       <input class="form-control mr-sm-2" type="search" placeholder="Contraseña" aria-label="Search">
       <div class="btn-toolbar">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Acceder</button>
-      <button id="btn_registrar" class="btn btn-outline-success my-2 my-sm-0" type="submit" href="registrarse.php">Registrarse</button>
+      <button id="btn_registrar" class="btn btn-outline-success my-2 my-sm-0" type="submit" href="#">Registrarse</button>
       </div>
     </form>
   </div>
@@ -388,3 +293,100 @@ Chocoflan, gelatinas básicas y de diseño, tiramisú, niño envuelto, carlota y
 </body>
 
 </html>
+
+
+
+
+<?php 
+  
+$alert = '';
+
+session_start();
+if(!empty($_SESSION['active']))
+{
+  header('location: sistema/');
+}else{
+
+  if(!empty($_POST))
+  {
+    if(empty($_POST['usuario']) || empty($_POST['clave']))
+    {
+      $alert = 'Ingrese su usuario y su calve';
+    }else{
+
+      require_once "conexion.php";
+
+      $user = mysqli_real_escape_string($conection,$_POST['usuario']);
+      $pass = md5(mysqli_real_escape_string($conection,$_POST['clave']));
+
+      $query = mysqli_query($conection,"SELECT * FROM Usuario WHERE Usuario= '$user' AND contraseña = '$pass'");
+      mysqli_close($conection);
+      $result = mysqli_num_rows($query);
+
+      if($result > 0)
+      {
+        $data = mysqli_fetch_array($query);
+        $_SESSION['active'] = true;
+        $_SESSION['idUser'] = $data['id_usuario'];
+        $_SESSION['nombre'] = $data['nombre'];
+                                $_SESSION['apellido']  = $data['apellidos'];
+                                $_SESSION['email']  = $data['correo'];
+                                $_SESSION['rol']    = $data['idrol'];
+        $_SESSION['user']   = $data['usuario'];
+        
+
+        header('location: sistema/');
+      }else{
+        $alert = 'El usuario o la clave son incorrectos';
+        session_destroy();
+      }
+
+
+    }
+
+  }
+}
+  require_once "conexion.php";
+
+ 
+  if(!empty($_POST))
+  {
+    $alerta='';
+    if(empty($_POST['nombre']) || empty($_POST['correo']) || empty($_POST['usuario']) || empty($_POST['contraseña'])||empty($_POST["apellidos"]) 
+                    ||empty($_POST['fecha_nac'])||empty($_POST['telefono'])||empty($_POST['direccion']))
+    {
+      $alerta='<p class="msg_error">Todos los campos son obligatorios.</p>';
+    }else{
+
+      $nombre = $_POST['nombre'];
+                        $apellidos = $_POST['apellidos'];
+      $fecha_nac  = $_POST['fecha_nac'];
+                        $telefono = $_POST['telefono'];
+      $correo   = $_POST['correo'];
+                        $direccion = $_POST['direccion'];
+                        $usuario = $_POST['usuario'];
+      $contraseña  = md5($_POST['contraseña']);
+      $rol    = 2;
+
+
+      $query = mysqli_query($conection,"SELECT * FROM usuario WHERE usuario = '$usuario' OR correo = '$correo' ");
+      $result = mysqli_fetch_array($query);
+
+      if($result > 0){
+        $alerta='<p class="msg_error">El correo o el usuario ya existe.</p>';
+      }else{
+
+        $query_insert = mysqli_query($conection,"INSERT INTO `usuario`(`nombre`, `apellidos`, `Fecha_nac`, `telefono`, `correo`, `direccion`,`idrol`, `Usuario`, `Contraseña`) VALUES"
+                                        . " ($nombre, $apellidos,$fecha_nac,$telefono,$correo,$direccion,$rol, $usuario,$contraseña)");
+        if($query_insert){
+          $alerta='<p class="msg_save">Usuario creado correctamente.</p>';
+        }else{
+                                $alerta='<p class="msg_error">Error al crear el usuario.</p>';}
+                               
+        }
+
+      }
+
+
+    }
+ ?>
